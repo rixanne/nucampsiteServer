@@ -10,11 +10,14 @@ partnerRouter
     res.setHeader('Content-Type', 'text/plain');
     next();
   })
-  .get((req, res) => {
+  .get((req, res, next) => {
     Partner.find()
       .then((partners) => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
+        res.write(
+          `Will send all partners to you:\n${req.body.name} with description: ${req.body.description}\n`
+        );
         res.json(partners);
       })
       .catch((err) => next(err));
@@ -62,10 +65,9 @@ partnerRouter
     res.statusCode = 403;
     res.end(`POST operation not supported on /partners/${req.params.partnerId}`);
   })
-  .put((req, res) => {
+  .put((req, res, next) => {
     Partner.findByIdAndUpdate(
       req.params.partnerId,
-      req.req.params.campsiteId,
       {
         $set: req.body
       },

@@ -16,7 +16,7 @@ promotionRouter
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
         res.write(
-          `Will send all the promotions to you: ${req.body.name} with description: ${req.body.description}\n`
+          `Will send all the promotions to you:\n${req.body.name} with description: ${req.body.description}\n`
         );
         res.json(campsites);
       })
@@ -78,9 +78,8 @@ promotionRouter
     )
       .then((promotion) => {
         res.statusCode = 200;
+        res.write(`Updating the promotion: ${req.params.promotionId}\n`);
         res.setHeader('Content-Type', 'application/json');
-        res.write(`Will update the promotion: ${req.body.name}
-        with description: ${req.body.description}\n`);
         res.json(promotion);
       })
       .catch((err) => next(err));
