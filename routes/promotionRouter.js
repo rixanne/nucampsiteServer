@@ -18,7 +18,7 @@ promotionRouter
         res.write(
           `Will send all the promotions to you:\n${req.body.name} with description: ${req.body.description}\n`
         );
-        res.json(campsites);
+        res.json(promotions);
       })
       .catch((err) => next(err));
   })
@@ -31,7 +31,7 @@ promotionRouter
         res.write(
           `Will add the promotion: ${req.body.name} with description: ${req.body.description}`
         );
-        res.json(campsite);
+        res.json(promotion);
       })
       .catch((err) => next(err));
   })
@@ -59,7 +59,7 @@ promotionRouter
       .then((campsite) => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        res.write(`Will send details of the promotion: ${req.params.campsiteId} to you`);
+        res.write(`Will send details of the promotion: ${req.params.promotionId} to you`);
         res.json(promotion);
       })
       .catch((err) => next(err));
@@ -86,7 +86,7 @@ promotionRouter
   })
 
   .delete((req, res, next) => {
-    Campsite.findByIdAndDelete(req.params.campsiteId)
+    Campsite.findByIdAndDelete(req.params.promotionId)
       .then((response) => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');

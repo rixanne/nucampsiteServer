@@ -15,6 +15,9 @@ campsiteRouter
       .then((campsites) => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
+        res.write(
+          `Will send all campsites to you:\n${req.body.name} with description: ${req.body.description}\n`
+        );
         res.json(campsites);
       })
       .catch((err) => next(err));
@@ -25,6 +28,9 @@ campsiteRouter
         console.log('Campsite Created ', campsite);
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
+        res.write(
+          `Will add the campsite: ${req.body.name} with description: ${req.body.description}`
+        );
         res.json(campsite);
       })
       .catch((err) => next(err));
@@ -50,6 +56,7 @@ campsiteRouter
       .then((campsite) => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
+        res.write(`Will send details of the campsite: ${req.params.campsiteId} to you`);
         res.json(campsite);
       })
       .catch((err) => next(err));
@@ -68,6 +75,7 @@ campsiteRouter
     )
       .then((campsite) => {
         res.statusCode = 200;
+        res.write(`Updating the campsite: ${req.params.campsiteId}\n`);
         res.setHeader('Content-Type', 'application/json');
         res.json(campsite);
       })
@@ -78,6 +86,7 @@ campsiteRouter
       .then((response) => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
+        res.write(`Deleting campsite: ${req.params.campsiteId}`);
         res.json(response);
       })
       .catch((err) => next(err));
