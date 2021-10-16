@@ -6,42 +6,30 @@ const partnerRouter = express.Router();
 
 partnerRouter
   .route('/')
-  .all((req, res, next) => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
-    next();
-  })
   .get((req, res, next) => {
     Partner.find()
       .then((partners) => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        res.write(
-          `Will send all partners to you:\n${req.body.name} with description: ${req.body.description}\n`
-        );
         res.json(partners);
       })
       .catch((err) => next(err));
   })
-
-  .post(authenticate.verifyUser, (req, res, next) => {
+  .post(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Partner.create(req.body)
       .then((partner) => {
-        console.log(
-          `Will add the partner: ${req.body.name} with description: ${req.body.description}`
-        );
+        console.log('Partner Created ', partner);
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
         res.json(partner);
       })
       .catch((err) => next(err));
   })
-
-  .put(authenticate.verifyUser, (req, res) => {
+  .put(authenticate.verifyUser, (req, res, next) => {
     res.statusCode = 403;
     res.end('PUT operation not supported on /partners');
   })
-  .delete(authenticate.verifyUser, (req, res, next) => {
+  .delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Partner.deleteMany()
       .then((response) => {
         res.statusCode = 200;
@@ -66,7 +54,7 @@ partnerRouter
     res.statusCode = 403;
     res.end(`POST operation not supported on /partners/${req.params.partnerId}`);
   })
-  .put(authenticate.verifyUser, (req, res, next) => {
+  .put(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Partner.findByIdAndUpdate(
       req.params.partnerId,
       {
@@ -76,19 +64,16 @@ partnerRouter
     )
       .then((partner) => {
         res.statusCode = 200;
-        res.write(`Updating the partner: ${req.params.partnerId}\n`);
         res.setHeader('Content-Type', 'application/json');
         res.json(partner);
       })
       .catch((err) => next(err));
   })
-
-  .delete(authenticate.verifyUser, (req, res, next) => {
+  .delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Partner.findByIdAndDelete(req.params.partnerId)
       .then((response) => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        res.write(`Deleting partner: ${req.params.partnerId}\n`);
         res.json(response);
       })
       .catch((err) => next(err));
